@@ -29,13 +29,20 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
             cd /home/${{ secrets.AWS_USER}}/Api-Server
             DOCKER_IMAGE_NAME="api-server"
-            echo "Building Docker image: $DOCKER_IMAGE_NAME"
-            docker build -t $DOCKER_IMAGE_NAME .
 
+              # Remove the old image and container
             sudo docker stop api_server_container || true
             sudo docker rm api_server_container || true
+            sudo docker rmi $DOCKER_IMAGE_NAME || true
+          
+            # Build the new image with no cache
+            echo "Building Docker image: $DOCKER_IMAGE_NAME"
+            docker build --no-cache -t $DOCKER_IMAGE_NAME .
+          
+            # Run the new container
             echo "Running Docker container: $DOCKER_IMAGE_NAME"
             sudo docker run -d --name api_server_container -p 80:5000 $DOCKER_IMAGE_NAME
+
           EOF
 
     - name: Notify deployment success
