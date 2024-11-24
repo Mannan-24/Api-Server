@@ -5,7 +5,7 @@ app = Flask(__name__)
 # Endpoint 1: Hello Endpoint
 @app.route('/hello', methods=['GET'])
 def hello():
-    return jsonify(message="Hello, Welcome to the API Mannan !")
+    return jsonify(message="Hello, Welcome to the API Bestoo !")
 
 # Endpoint 2: Sum Endpoint
 @app.route('/sum', methods=['GET'])
